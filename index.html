@@ -59,7 +59,7 @@
 <div class="wrap">
   <header class="hero">
     <div class="hero-row">
-      <div><h1>Personal Finance-Albarqoni Firdaus</h1><p>Dashboard pemasukan & pengeluaran pribadi</p></div>
+      <div><h1>Personal Finance-Albarqoni Firdaus</h1><p>Dashboard pemasukan & pengeluaran pribadi</p><p id="lastUpdate" style="margin-top:5px;font-size:11px;opacity:.68">Terakhir update: -</p></div>
       
     </div>
   </header>
@@ -138,6 +138,18 @@
       const json = await res.json();
       if(!json.success) throw new Error(json.message || "API mengembalikan error.");
       DATA = json;
+      if (DATA.generatedAt) {
+        const updated = new Date(DATA.generatedAt);
+        document.getElementById("lastUpdate").textContent =
+          "Terakhir update: " +
+          new Intl.DateTimeFormat("id-ID", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          }).format(updated) + " WIB";
+      }
       setupMonths();
       document.getElementById("periodSelect").addEventListener("change", render);
       document.getElementById("monthSelect").addEventListener("change", render);
@@ -211,113 +223,18 @@
     const arr=categoryData(tx);
     if(chart) chart.destroy();
 
-    const smartLabels = {
-      id: "smartLabels",
-      afterDatasetsDraw(chart) {
-        const meta = chart.getDatasetMeta(0);
-        if (!meta || !meta.data.length) return;
-
-        const ctx = chart.ctx;
-        const area = chart.chartArea;
-        const mobile = window.innerWidth <= 560;
-        const minPct = mobile ? 2.5 : 1.5;
-        const lineGap = mobile ? 14 : 16;
-        const edgePad = mobile ? 5 : 10;
-        const elbow = mobile ? 14 : 22;
-        const textGap = 4;
-
-        const left = [];
-        const right = [];
-
-        meta.data.forEach((arc, i) => {
-          const value = arr[i]?.[1] || 0;
-          const pct = total ? value / total * 100 : 0;
-          if (pct < minPct) return;
-
-          const angle = (arc.startAngle + arc.endAngle) / 2;
-          const cos = Math.cos(angle);
-          const sin = Math.sin(angle);
-          const side = cos >= 0 ? 1 : -1;
-
-          const x1 = arc.x + cos * (arc.outerRadius + 3);
-          const y1 = arc.y + sin * (arc.outerRadius + 3);
-          const x2 = arc.x + cos * (arc.outerRadius + (mobile ? 10 : 16));
-          const naturalY = arc.y + sin * (arc.outerRadius + (mobile ? 16 : 24));
-
-          const item = {
-            i, value, pct, side, x1, y1, x2,
-            y: naturalY,
-            label: `${arr[i][0]} ${pct.toFixed(1)}%`
-          };
-          (side > 0 ? right : left).push(item);
-        });
-
-        function spread(items) {
-          items.sort((a,b)=>a.y-b.y);
-          const top = area.top + 8;
-          const bottom = area.bottom - 8;
-
-          for(let i=0;i<items.length;i++){
-            if(i===0) items[i].y=Math.max(items[i].y,top);
-            else items[i].y=Math.max(items[i].y,items[i-1].y+lineGap);
-          }
-
-          if(items.length && items[items.length-1].y>bottom){
-            const shift=items[items.length-1].y-bottom;
-            items.forEach(x=>x.y-=shift);
-            for(let i=items.length-2;i>=0;i--){
-              items[i].y=Math.min(items[i].y,items[i+1].y-lineGap);
-            }
-            if(items[0].y<top){
-              const down=top-items[0].y;
-              items.forEach(x=>x.y+=down);
-            }
-          }
-        }
-
-        spread(left);
-        spread(right);
-
-        ctx.save();
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = "#718078";
-        ctx.fillStyle = "#435149";
-        ctx.font = `${mobile ? 8 : 10}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif`;
-        ctx.textBaseline = "middle";
-
-        [...left,...right].forEach(item=>{
-          const targetX = item.side > 0
-            ? area.right - edgePad
-            : area.left + edgePad;
-
-          const elbowX = item.side > 0
-            ? targetX - elbow
-            : targetX + elbow;
-
-          ctx.beginPath();
-          ctx.moveTo(item.x1,item.y1);
-          ctx.lineTo(item.x2,item.y);
-          ctx.lineTo(elbowX,item.y);
-          ctx.lineTo(targetX,item.y);
-          ctx.stroke();
-
-          ctx.textAlign = item.side > 0 ? "right" : "left";
-          const tx = item.side > 0 ? targetX - textGap : targetX + textGap;
-          ctx.fillText(item.label, tx, item.y);
-        });
-
-        ctx.restore();
-      }
-    };
-
     chart=new Chart(document.getElementById("pie"),{
       type:"pie",
-      plugins:[smartLabels],
       data:{
         labels:arr.map(x=>x[0]),
         datasets:[{
           data:arr.map(x=>x[1]),
-          backgroundColor:["#0f5132","#146c43","#198754","#20a464","#40916c","#52b788","#74c69d","#95d5b2","#b7e4c7","#2d6a4f","#1b4332","#588157","#6a994e","#a7c957"],
+          backgroundColor:[
+            "#0f5132","#146c43","#198754","#20a464",
+            "#40916c","#52b788","#74c69d","#95d5b2",
+            "#b7e4c7","#2d6a4f","#1b4332","#588157",
+            "#6a994e","#a7c957"
+          ],
           borderColor:"#fff",
           borderWidth:2
         }]
@@ -325,13 +242,20 @@
       options:{
         responsive:true,
         maintainAspectRatio:false,
-        layout:{
-          padding: window.innerWidth <= 560
-            ? {top:18,right:78,bottom:18,left:78}
-            : {top:25,right:120,bottom:25,left:120}
-        },
+        layout:{padding:8},
         plugins:{
-          legend:{display:false},
+          legend:{
+            display:true,
+            position:"bottom",
+            labels:{
+              boxWidth:12,
+              boxHeight:12,
+              padding:12,
+              font:{size:10},
+              usePointStyle:true,
+              pointStyle:"circle"
+            }
+          },
           tooltip:{
             callbacks:{
               label:c=>`${c.label}: ${rp(c.raw)} (${total?(c.raw/total*100).toFixed(1):"0.0"}%)`
