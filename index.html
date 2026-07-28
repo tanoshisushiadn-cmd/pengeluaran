@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#146c43">
+  <title>Personal Finance Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f3f7f4;color:#17251c}
+    .wrap{max-width:1240px;margin:auto;padding:26px 18px 50px}
+    .hero{background:linear-gradient(135deg,#0f5132,#198754);color:#fff;padding:27px 28px;border-radius:22px;box-shadow:0 12px 30px rgba(15,81,50,.17);margin-bottom:20px}
+    .hero-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    .hero h1{font-size:28px;margin-bottom:5px}.hero p{font-size:14px;opacity:.82}
+    .badge{font-size:12px;padding:9px 13px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.12);border-radius:12px}
+    .filters,.panel,.card{background:#fff;border:1px solid #e8efea;box-shadow:0 4px 16px rgba(0,0,0,.045)}
+    .filters{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;padding:17px 19px;border-radius:17px;margin-bottom:18px}
+    .field{min-width:165px}.field label{display:block;font-size:11px;font-weight:700;color:#738078;margin-bottom:7px;letter-spacing:.35px}
+    select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;background:#fff;font-size:14px;color:#203027;outline:none}
+    select:focus{border-color:#198754}.period{margin-left:auto;padding-bottom:10px;font-size:13px;color:#718078}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+    .card{padding:19px;border-radius:17px}.card.saldo{background:linear-gradient(135deg,#146c43,#198754);border:0;color:#fff}
+    .label{font-size:11px;font-weight:700;color:#748078;text-transform:uppercase;letter-spacing:.4px;margin-bottom:9px}
+    .saldo .label{color:rgba(255,255,255,.78)}.value{font-size:23px;font-weight:760;word-break:break-word}
+    .hint{font-size:11px;color:#8b968f;margin-top:7px}.saldo .hint{color:rgba(255,255,255,.72)}
+    .green{color:#198754}.red{color:#c0392b}
+    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:17px;margin-bottom:18px}.panel{padding:21px;border-radius:17px}
+    .title{font-size:16px;font-weight:730}.subtitle{font-size:12px;color:#8a958e;margin:4px 0 18px}
+    .chartbox{height:335px;position:relative}.categories{max-height:335px;overflow:auto}
+    .cat{display:flex;justify-content:space-between;gap:15px;padding:11px 0;border-bottom:1px solid #edf2ee;font-size:13px}
+    .cat:last-child{border-bottom:0}.cat strong{display:block;text-align:right}.cat span{display:block;text-align:right;color:#8b968f;font-size:11px;margin-top:2px}
+    .tablebox{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}
+    th{text-align:left;padding:11px 9px;border-bottom:1px solid #e6ede8;font-size:10px;color:#7d8982;text-transform:uppercase}
+    td{padding:12px 9px;border-bottom:1px solid #f0f3f1;font-size:12px}.money{text-align:right;font-weight:650}
+    .pill{display:inline-block;padding:5px 9px;border-radius:20px;font-size:10px;font-weight:700}.in{background:#e7f5ed;color:#157347}.out{background:#fbeaea;color:#b02a37}
+    .loading{text-align:center;padding:80px 20px;color:#657269}.spinner{width:34px;height:34px;border:4px solid #e1ebe4;border-top-color:#198754;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+    @keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none}.empty{text-align:center;color:#8b968f;padding:25px}
+    .error{max-width:700px;margin:60px auto;background:#fff;border:1px solid #eadada;border-radius:16px;padding:22px;color:#8a2e2e;line-height:1.6}
+    @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+    @media(max-width:560px){.wrap{padding:12px 10px 30px}.hero{padding:21px 18px;border-radius:17px}.hero h1{font-size:22px}.cards{gap:9px}.card{padding:14px}.value{font-size:17px}.field{flex:1;min-width:130px}.period{width:100%;margin:0}.panel{padding:17px}.chartbox{height:300px}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-row">
+      <div><h1>Personal Finance</h1><p>Dashboard pemasukan & pengeluaran pribadi</p></div>
+      <div class="badge">Terhubung ke Google Sheets</div>
+    </div>
+  </header>
+
+  <div id="loading" class="loading"><div class="spinner"></div>Memuat data keuangan...</div>
+  <div id="error" class="error hidden"></div>
+
+  <main id="dashboard" class="hidden">
+    <section class="filters">
+      <div class="field">
+        <label>PERIODE</label>
+        <select id="periodSelect">
+          <option value="1">1 Bulan</option>
+          <option value="3">3 Bulan</option>
+          <option value="6">6 Bulan</option>
+          <option value="12">1 Tahun</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>SAMPAI BULAN</label>
+        <select id="monthSelect"></select>
+      </div>
+      <div id="periodInfo" class="period">-</div>
+    </section>
+
+    <section class="cards">
+      <article class="card saldo"><div class="label">Saldo Akhir</div><div class="value" id="saldo">Rp0</div><div class="hint">Saldo berjalan sampai akhir bulan terpilih</div></article>
+      <article class="card"><div class="label">Pemasukan</div><div class="value green" id="masuk">Rp0</div><div class="hint">Periode terpilih</div></article>
+      <article class="card"><div class="label">Pengeluaran</div><div class="value red" id="keluar">Rp0</div><div class="hint">Periode terpilih</div></article>
+      <article class="card"><div class="label">Net Cashflow</div><div class="value" id="cashflow">Rp0</div><div class="hint">Pemasukan − pengeluaran</div></article>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <div class="title">Komposisi Pengeluaran</div>
+        <div class="subtitle" id="chartSub">Berdasarkan kategori</div>
+        <div class="chartbox"><canvas id="pie"></canvas></div>
+      </article>
+      <article class="panel">
+        <div class="title">Pengeluaran per Kategori</div>
+        <div class="subtitle">Dari terbesar ke terkecil</div>
+        <div id="categories" class="categories"></div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="title">Transaksi Terakhir</div>
+      <div class="subtitle">15 transaksi terakhir pada periode terpilih</div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Jenis</th><th>Kategori</th><th>Deskripsi</th><th style="text-align:right">Nominal</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // WAJIB: setelah Apps Script di-deploy sebagai Web App API,
+  // ganti teks di bawah dengan URL deployment yang berakhiran /exec.
+  const API_URL = "https://script.google.com/macros/s/AKfycbzYcOj3x3KNBzMv84zKIsD_HDs29T0jBR2X-CaKkCNDqKWtBNTAjUF9vJH2Q4nZZFCgEQ/exec";
+
+  let DATA = null;
+  let chart = null;
+
+  document.addEventListener("DOMContentLoaded", loadData);
+
+  async function loadData(){
+    if(API_URL.includes("PASTE_URL")){
+      return fail("API belum dipasang. Buka file index.html dan ganti <b>https://script.google.com/macros/s/AKfycbzYcOj3x3KNBzMv84zKIsD_HDs29T0jBR2X-CaKkCNDqKWtBNTAjUF9vJH2Q4nZZFCgEQ/exec</b> dengan URL Web App Apps Script yang berakhiran <b>/exec</b>.");
+    }
+    try{
+      const res = await fetch(API_URL + "?action=data", {cache:"no-store"});
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      const json = await res.json();
+      if(!json.success) throw new Error(json.message || "API mengembalikan error.");
+      DATA = json;
+      setupMonths();
+      document.getElementById("periodSelect").addEventListener("change", render);
+      document.getElementById("monthSelect").addEventListener("change", render);
+      document.getElementById("loading").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      render();
+    }catch(e){
+      fail("Dashboard gagal mengambil data dari Apps Script.<br><br><b>Detail:</b> " + esc(e.message) + "<br><br>Pastikan deployment Apps Script dapat diakses dan API_URL menggunakan URL <b>/exec</b>.");
+    }
+  }
+
+  function fail(msg){
+    document.getElementById("loading").classList.add("hidden");
+    const el=document.getElementById("error"); el.innerHTML=msg; el.classList.remove("hidden");
+  }
+
+  function setupMonths(){
+    const select=document.getElementById("monthSelect");
+    select.innerHTML="";
+    [...DATA.months].sort().reverse().forEach(m=>{
+      const o=document.createElement("option"); o.value=m; o.textContent=monthName(m); select.appendChild(o);
+    });
+  }
+
+  function render(){
+    const n=Number(document.getElementById("periodSelect").value);
+    const endKey=document.getElementById("monthSelect").value;
+    if(!endKey) return;
+    const endMonth=monthDate(endKey);
+    const start=new Date(endMonth.getFullYear(),endMonth.getMonth()-n+1,1);
+    const end=new Date(endMonth.getFullYear(),endMonth.getMonth()+1,0,23,59,59,999);
+
+    const period=DATA.transactions.filter(x=>{const d=isoDate(x.date); return d>=start&&d<=end});
+    const history=DATA.transactions.filter(x=>isoDate(x.date)<=end);
+
+    let masuk=0,keluar=0,saldo=0;
+    period.forEach(x=>x.jenis==="Masuk"?masuk+=x.amount:keluar+=x.amount);
+    history.forEach(x=>x.jenis==="Masuk"?saldo+=x.amount:saldo-=x.amount);
+    const net=masuk-keluar;
+
+    document.getElementById("masuk").textContent=rp(masuk);
+    document.getElementById("keluar").textContent=rp(keluar);
+    document.getElementById("saldo").textContent=rp(saldo);
+    const cf=document.getElementById("cashflow"); cf.textContent=rp(net); cf.classList.remove("green","red"); if(net>0)cf.classList.add("green"); if(net<0)cf.classList.add("red");
+
+    const label=monthShort(start)+" — "+monthShort(endMonth);
+    document.getElementById("periodInfo").textContent=label;
+    document.getElementById("chartSub").textContent="Pengeluaran "+label;
+
+    renderCategories(period,keluar);
+    renderPie(period,keluar);
+    renderRows(period);
+  }
+
+  function categoryData(tx){
+    const t={};
+    tx.filter(x=>x.jenis==="Keluar").forEach(x=>t[x.kategori]=(t[x.kategori]||0)+x.amount);
+    return Object.entries(t).sort((a,b)=>b[1]-a[1]);
+  }
+
+  function renderCategories(tx,total){
+    const box=document.getElementById("categories"), arr=categoryData(tx); box.innerHTML="";
+    if(!arr.length){box.innerHTML='<div class="empty">Belum ada pengeluaran.</div>';return}
+    arr.forEach(([name,val])=>{
+      const pct=total?val/total*100:0, el=document.createElement("div"); el.className="cat";
+      el.innerHTML=`<div>${esc(name)}</div><div><strong>${rp(val)}</strong><span>${pct.toFixed(1)}%</span></div>`; box.appendChild(el);
+    });
+  }
+
+  function renderPie(tx,total){
+    const arr=categoryData(tx);
+    if(chart) chart.destroy();
+    chart=new Chart(document.getElementById("pie"),{
+      type:"pie",
+      data:{labels:arr.map(x=>x[0]),datasets:[{data:arr.map(x=>x[1]),backgroundColor:["#0f5132","#146c43","#198754","#20a464","#40916c","#52b788","#74c69d","#95d5b2","#b7e4c7","#2d6a4f","#1b4332","#588157","#6a994e","#a7c957"],borderColor:"#fff",borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom",labels:{boxWidth:11,padding:13,font:{size:10}}},tooltip:{callbacks:{label:c=>`${c.label}: ${rp(c.raw)} (${total?(c.raw/total*100).toFixed(1):"0.0"}%)`}}}}
+    });
+  }
+
+  function renderRows(tx){
+    const body=document.getElementById("rows"); body.innerHTML="";
+    const latest=[...tx].sort((a,b)=>b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id),undefined,{numeric:true})).slice(0,15);
+    if(!latest.length){body.innerHTML='<tr><td colspan="5" class="empty">Belum ada transaksi.</td></tr>';return}
+    latest.forEach(x=>{
+      const tr=document.createElement("tr"), cls=x.jenis==="Masuk"?"in":"out";
+      tr.innerHTML=`<td>${dateLabel(x.date)}</td><td><span class="pill ${cls}">${esc(x.jenis)}</span></td><td>${esc(x.kategori)}</td><td>${esc(x.deskripsi)}</td><td class="money">${rp(x.amount)}</td>`;
+      body.appendChild(tr);
+    });
+  }
+
+  const rp=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n);
+  function monthDate(s){const [y,m]=s.split("-").map(Number);return new Date(y,m-1,1)}
+  function isoDate(s){const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)}
+  const monthName=s=>new Intl.DateTimeFormat("id-ID",{month:"long",year:"numeric"}).format(monthDate(s));
+  const monthShort=d=>new Intl.DateTimeFormat("id-ID",{month:"short",year:"numeric"}).format(d);
+  const dateLabel=s=>new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",year:"numeric"}).format(isoDate(s));
+  function esc(v){const d=document.createElement("div");d.textContent=v??"";return d.innerHTML}
+</script>
+</body>
+</html>
