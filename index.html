@@ -23,17 +23,24 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
 #flowMasuk{color:#198754}#flowKeluar{color:#527060}.net-box{display:flex;justify-content:space-between;align-items:center;gap:15px;background:#f5f7f5;border-radius:14px;padding:15px;margin-top:28px;font-size:11px}.net-box strong{font-size:15px;color:#198754}.opening-note{font-size:10px;color:#8a958e;margin-top:12px}
 
     .bar-value-wrap{text-align:right;white-space:nowrap}.bar-value-wrap strong{display:block;font-size:10px}.bar-share{display:block;font-size:9px;color:#7f8b84;margin-top:2px}
-    .compare-panel{margin-bottom:18px}.compare-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:-5px 0 18px;font-size:10px;color:#6f7c74}
+    .compare-panel{margin-bottom:18px}
+    .compare-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+    .compare-summary-card{border:1px solid #e7eee9;background:#f8faf8;border-radius:13px;padding:16px}
+    .compare-summary-card>span{display:block;font-size:11px;font-weight:800;color:#758179;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+    .compare-summary-card>div{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:4px 0}
+    .compare-summary-card small{font-size:11px;color:#87928b}.compare-summary-card strong{font-size:13px}
+    .delta-card strong{font-size:14px}
+.compare-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:-5px 0 18px;font-size:12px;color:#6f7c74}
     .legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}.legend-from{background:#9eb9a8}.legend-to{background:#198754}
     .compare-list{display:flex;flex-direction:column;gap:16px}.compare-item{display:grid;grid-template-columns:130px minmax(0,1fr) 115px;gap:11px;align-items:center}
-    .compare-name{font-size:11px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.compare-bars{display:flex;flex-direction:column;gap:5px}
+    .compare-name{font-size:12px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.compare-bars{display:flex;flex-direction:column;gap:5px}
     .compare-track{height:8px;background:#edf1ee;border-radius:999px;overflow:hidden}.compare-fill{height:100%;border-radius:999px;min-width:2px}.compare-from{background:#9eb9a8}.compare-to{background:linear-gradient(90deg,#146c43,#20a464)}
-    .compare-change{text-align:right;font-size:10px;font-weight:750;white-space:nowrap}.change-up{color:#198754}.change-down{color:#b6403b}.change-flat{color:#7b8780}.compare-amounts{display:block;font-size:8px;font-weight:500;color:#8a958e;margin-top:3px}
+    .compare-change{text-align:right;font-size:12px;font-weight:750;white-space:nowrap}.change-up{color:#198754}.change-down{color:#b6403b}.change-flat{color:#7b8780}.compare-amounts{display:block;font-size:10px;font-weight:500;color:#8a958e;margin-top:3px}
 
     .tablebox{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}th{text-align:left;padding:11px 9px;border-bottom:1px solid #e6ede8;font-size:10px;color:#7d8982;text-transform:uppercase}td{padding:12px 9px;border-bottom:1px solid #f0f3f1;font-size:12px}.money{text-align:right;font-weight:650}
 .loading{text-align:center;padding:80px 20px;color:#657269}.spinner{width:34px;height:34px;border:4px solid #e1ebe4;border-top-color:#198754;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}@keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none}.empty{text-align:center;color:#8b968f;padding:25px}.error{max-width:700px;margin:60px auto;background:#fff;border:1px solid #eadada;border-radius:16px;padding:22px;color:#8a2e2e}
 @media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}}
-@media(max-width:560px){.wrap{padding:10px 8px 28px}.hero{padding:20px 16px;border-radius:16px}.hero h1{font-size:21px}.filters{padding:14px 12px;gap:10px}.field{flex:1 1 calc(50% - 5px);min-width:0}.period{width:100%;margin:0;padding:2px 0;font-size:11px}select{font-size:12px;padding:9px 8px}.cards{gap:8px}.card{padding:13px 11px}.value{font-size:16px}.grid{display:block}.grid .panel{margin-bottom:12px}.panel{padding:15px 12px}.panel-head{margin-bottom:16px}.panel-period{font-size:9px}.title{font-size:15px}.bar-list{gap:11px}.bar-item{grid-template-columns:75px minmax(0,1fr) 76px;gap:7px}.bar-name,.bar-value{font-size:9px}.bar-track,.flow-track{height:9px}.flow-label{font-size:10px}.bar-value-wrap strong{font-size:9px}.bar-share{font-size:8px}.compare-item{grid-template-columns:72px minmax(0,1fr) 75px;gap:6px}.compare-name{font-size:9px}.compare-change{font-size:9px}.compare-amounts{font-size:7px}.compare-legend{font-size:9px;gap:10px}.net-box{padding:13px 11px;margin-top:20px}.net-box strong{font-size:13px}}
+@media(max-width:560px){.wrap{padding:10px 8px 28px}.hero{padding:20px 16px;border-radius:16px}.hero h1{font-size:21px}.filters{padding:14px 12px;gap:10px}.field{flex:1 1 calc(50% - 5px);min-width:0}.period{width:100%;margin:0;padding:2px 0;font-size:11px}select{font-size:12px;padding:9px 8px}.cards{gap:8px}.card{padding:13px 11px}.value{font-size:16px}.grid{display:block}.grid .panel{margin-bottom:12px}.panel{padding:15px 12px}.panel-head{margin-bottom:16px}.panel-period{font-size:9px}.title{font-size:15px}.bar-list{gap:11px}.bar-item{grid-template-columns:75px minmax(0,1fr) 76px;gap:7px}.bar-name,.bar-value{font-size:9px}.bar-track,.flow-track{height:9px}.flow-label{font-size:10px}.bar-value-wrap strong{font-size:9px}.bar-share{font-size:8px}.compare-item{grid-template-columns:72px minmax(0,1fr) 75px;gap:6px}.compare-name{font-size:10px}.compare-change{font-size:11px}.compare-amounts{font-size:9px}.compare-legend{font-size:10px;gap:10px}.compare-summary{grid-template-columns:1fr;gap:7px}.compare-summary-card{padding:13px 12px}.net-box{padding:13px 11px;margin-top:20px}.net-box strong{font-size:13px}}
   </style>
 </head>
 <body>
@@ -62,6 +69,35 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
       <article class="card"><div class="label">Net Cashflow</div><div class="value" id="cashflow">Rp0</div><div class="hint">Pemasukan − pengeluaran</div></article>
     </section>
 
+    <section id="comparisonPanel" class="panel compare-panel hidden">
+      <div class="panel-head">
+        <div><div class="eyebrow">PERBANDINGAN</div><div class="title">Pengeluaran Per Kategori Antar Bulan</div></div>
+        <div class="panel-period" id="comparisonPeriod">-</div>
+      </div>
+      <div class="compare-summary">
+        <div class="compare-summary-card">
+          <span id="summaryFromLabel">Bulan awal</span>
+          <div><small>Pemasukan</small><strong id="summaryFromMasuk">Rp0</strong></div>
+          <div><small>Pengeluaran</small><strong id="summaryFromKeluar">Rp0</strong></div>
+        </div>
+        <div class="compare-summary-card">
+          <span id="summaryToLabel">Bulan akhir</span>
+          <div><small>Pemasukan</small><strong id="summaryToMasuk">Rp0</strong></div>
+          <div><small>Pengeluaran</small><strong id="summaryToKeluar">Rp0</strong></div>
+        </div>
+        <div class="compare-summary-card delta-card">
+          <span>PERUBAHAN</span>
+          <div><small>Pemasukan</small><strong id="summaryMasukChange">0.0%</strong></div>
+          <div><small>Pengeluaran</small><strong id="summaryKeluarChange">0.0%</strong></div>
+        </div>
+      </div>
+      <div class="compare-legend">
+        <span><i class="legend-dot legend-from"></i><span id="legendFrom">Bulan awal</span></span>
+        <span><i class="legend-dot legend-to"></i><span id="legendTo">Bulan akhir</span></span>
+      </div>
+      <div id="comparisonBars" class="compare-list"></div>
+    </section>
+
     <section class="grid">
       <article class="panel">
         <div class="panel-head"><div><div class="eyebrow">PENGELUARAN</div><div class="title">Per Kategori</div></div><div class="panel-period" id="categoryPeriod">-</div></div>
@@ -76,17 +112,7 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
       </article>
     </section>
 
-    <section id="comparisonPanel" class="panel compare-panel hidden">
-      <div class="panel-head">
-        <div><div class="eyebrow">PERBANDINGAN</div><div class="title">Pengeluaran Per Kategori Antar Bulan</div></div>
-        <div class="panel-period" id="comparisonPeriod">-</div>
-      </div>
-      <div class="compare-legend">
-        <span><i class="legend-dot legend-from"></i><span id="legendFrom">Bulan awal</span></span>
-        <span><i class="legend-dot legend-to"></i><span id="legendTo">Bulan akhir</span></span>
-      </div>
-      <div id="comparisonBars" class="compare-list"></div>
-    </section>
+
 
     <section class="panel">
       <div class="title">Transaksi Terakhir</div>
@@ -183,7 +209,36 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
     const fromMap=Object.fromEntries(categoryData(fromTx)),toMap=Object.fromEntries(categoryData(toTx));
     const names=[...new Set([...Object.keys(fromMap),...Object.keys(toMap)])].sort((a,b)=>Math.max(toMap[b]||0,fromMap[b]||0)-Math.max(toMap[a]||0,fromMap[a]||0));
     document.getElementById("comparisonPeriod").textContent=monthName(fromKey)+" vs "+monthName(toKey);
-    document.getElementById("legendFrom").textContent=monthName(fromKey);document.getElementById("legendTo").textContent=monthName(toKey);box.innerHTML="";
+    document.getElementById("legendFrom").textContent=monthName(fromKey);
+    document.getElementById("legendTo").textContent=monthName(toKey);
+
+    const sumMonth=tx=>{
+      let masuk=0,keluar=0;
+      tx.forEach(x=>x.jenis==="Masuk"?masuk+=x.amount:keluar+=x.amount);
+      return {masuk,keluar};
+    };
+    const a=sumMonth(fromTx), b=sumMonth(toTx);
+    const pct=(oldVal,newVal)=>{
+      if(oldVal===0&&newVal>0)return {text:"Baru",cls:"change-up"};
+      if(oldVal===0)return {text:"0.0%",cls:"change-flat"};
+      const n=(newVal-oldVal)/oldVal*100;
+      return {text:(n>0?"+":"")+n.toFixed(1)+"%",cls:n>0?"change-up":n<0?"change-down":"change-flat"};
+    };
+    const pm=pct(a.masuk,b.masuk), pk=pct(a.keluar,b.keluar);
+
+    document.getElementById("summaryFromLabel").textContent=monthName(fromKey);
+    document.getElementById("summaryToLabel").textContent=monthName(toKey);
+    document.getElementById("summaryFromMasuk").textContent=rp(a.masuk);
+    document.getElementById("summaryFromKeluar").textContent=rp(a.keluar);
+    document.getElementById("summaryToMasuk").textContent=rp(b.masuk);
+    document.getElementById("summaryToKeluar").textContent=rp(b.keluar);
+
+    const sm=document.getElementById("summaryMasukChange");
+    const sk=document.getElementById("summaryKeluarChange");
+    sm.textContent=pm.text; sm.className=pm.cls;
+    sk.textContent=pk.text; sk.className=pk.cls;
+
+    box.innerHTML="";
     if(!names.length){box.innerHTML='<div class="empty">Belum ada pengeluaran untuk dibandingkan.</div>';return}
     const max=Math.max(1,...names.flatMap(n=>[fromMap[n]||0,toMap[n]||0]));
     names.forEach(name=>{
