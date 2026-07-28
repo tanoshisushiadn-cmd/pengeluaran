@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f3f7f4;color:#17251c}
+    html,body{width:100%;max-width:100%;overflow-x:hidden}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f3f7f4;color:#17251c}
     .wrap{max-width:1240px;margin:auto;padding:26px 18px 50px}
     .hero{background:linear-gradient(135deg,#0f5132,#198754);color:#fff;padding:27px 28px;border-radius:22px;box-shadow:0 12px 30px rgba(15,81,50,.17);margin-bottom:20px}
     .hero-row{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
@@ -26,10 +26,10 @@
     .saldo .label{color:rgba(255,255,255,.78)}.value{font-size:23px;font-weight:760;word-break:break-word}
     .hint{font-size:11px;color:#8b968f;margin-top:7px}.saldo .hint{color:rgba(255,255,255,.72)}
     .green{color:#198754}.red{color:#c0392b}
-    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:17px;margin-bottom:18px}.panel{padding:21px;border-radius:17px}
+    .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:17px;margin-bottom:18px}.panel{padding:21px;border-radius:17px;min-width:0;max-width:100%;overflow:hidden}
     .title{font-size:16px;font-weight:730}.subtitle{font-size:12px;color:#8a958e;margin:4px 0 18px}
     .chartbox{height:390px;position:relative;overflow:visible}.categories{max-height:335px;overflow-y:auto;padding-right:14px;scrollbar-gutter:stable}
-    .cat{display:flex;justify-content:space-between;gap:12px;padding:10px 2px 10px 0;border-bottom:1px solid #edf2ee;font-size:11px}
+    .cat{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px;padding:10px 2px 10px 0;border-bottom:1px solid #edf2ee;font-size:11px;min-width:0}.cat>div:first-child{min-width:0;overflow-wrap:anywhere;word-break:break-word}.cat>div:last-child{white-space:nowrap}
     .cat:last-child{border-bottom:0}.cat strong{display:block;text-align:right;font-size:11px}.cat span{display:block;text-align:right;color:#8b968f;font-size:10px;margin-top:2px}
     .tablebox{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}
     th{text-align:left;padding:11px 9px;border-bottom:1px solid #e6ede8;font-size:10px;color:#7d8982;text-transform:uppercase}
@@ -39,14 +39,27 @@
     @keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none}.empty{text-align:center;color:#8b968f;padding:25px}
     .error{max-width:700px;margin:60px auto;background:#fff;border:1px solid #eadada;border-radius:16px;padding:22px;color:#8a2e2e;line-height:1.6}
     @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
-    @media(max-width:560px){.wrap{padding:12px 10px 30px}.hero{padding:21px 18px;border-radius:17px}.hero h1{font-size:22px}.cards{gap:9px}.card{padding:14px}.value{font-size:17px}.field{flex:1;min-width:130px}.period{width:100%;margin:0}.panel{padding:17px}.chartbox{height:300px}}
+    @media(max-width:560px){
+      .wrap{width:100%;max-width:100%;padding:10px 8px 28px;overflow-x:hidden}
+      .hero{padding:20px 16px;border-radius:16px}.hero h1{font-size:21px}
+      .filters{padding:14px 12px;gap:10px}.field{flex:1 1 125px;min-width:0}.period{width:100%;margin:0}
+      .cards{gap:8px}.card{padding:13px 11px;min-width:0}.value{font-size:16px}
+      .grid{display:block;width:100%;max-width:100%}.grid .panel{width:100%;max-width:100%;margin-bottom:12px}
+      .panel{padding:15px 12px;overflow:hidden}
+      .chartbox{width:100%;max-width:100%;height:330px;overflow:hidden}
+      .chartbox canvas{display:block!important;width:100%!important;max-width:100%!important;height:100%!important}
+      .categories{width:100%;max-width:100%;max-height:300px;overflow-y:auto;overflow-x:hidden;padding-right:8px;scrollbar-gutter:auto}
+      .cat{width:100%;max-width:100%;grid-template-columns:minmax(0,1fr) auto;gap:6px;font-size:10px}
+      .cat strong{font-size:10px}.cat span{font-size:9px}
+      .title{font-size:15px}.subtitle{font-size:11px}
+    }
   </style>
 </head>
 <body>
 <div class="wrap">
   <header class="hero">
     <div class="hero-row">
-      <div><h1>Personal Finance</h1><p>Dashboard pemasukan & pengeluaran pribadi</p></div>
+      <div><h1>Personal Finance-Albarqoni Firdaus</h1><p>Dashboard pemasukan & pengeluaran pribadi</p></div>
       
     </div>
   </header>
@@ -245,7 +258,7 @@
       options:{
         responsive:true,
         maintainAspectRatio:false,
-        layout:{padding:{top:38,right:72,bottom:38,left:72}},
+        layout:{padding: window.innerWidth <= 560 ? {top:28,right:38,bottom:28,left:38} : {top:38,right:72,bottom:38,left:72}},
         plugins:{
           legend:{display:false},
           datalabels:{
@@ -258,10 +271,10 @@
               return ctx.chart.data.labels[ctx.dataIndex]+" "+pct.toFixed(1)+"%";
             },
             color:"#435149",
-            font:{size:10,weight:"600"},
+            font:{size: window.innerWidth <= 560 ? 8 : 10,weight:"600"},
             anchor:"end",
             align:"end",
-            offset:20,
+            offset: window.innerWidth <= 560 ? 10 : 20,
             clamp:false,
             clip:false,
             textAlign:"center"
