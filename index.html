@@ -211,41 +211,108 @@
     const arr=categoryData(tx);
     if(chart) chart.destroy();
 
-    const leaderLines = {
-      id: "leaderLines",
+    const smartLabels = {
+      id: "smartLabels",
       afterDatasetsDraw(chart) {
         const meta = chart.getDatasetMeta(0);
+        if (!meta || !meta.data.length) return;
+
         const ctx = chart.ctx;
-        ctx.save();
-        ctx.strokeStyle = "#718078";
-        ctx.lineWidth = 1;
+        const area = chart.chartArea;
+        const mobile = window.innerWidth <= 560;
+        const minPct = mobile ? 2.5 : 1.5;
+        const lineGap = mobile ? 14 : 16;
+        const edgePad = mobile ? 5 : 10;
+        const elbow = mobile ? 14 : 22;
+        const textGap = 4;
+
+        const left = [];
+        const right = [];
 
         meta.data.forEach((arc, i) => {
           const value = arr[i]?.[1] || 0;
-          const pct = total ? (value / total * 100) : 0;
-          if (pct < 2) return;
+          const pct = total ? value / total * 100 : 0;
+          if (pct < minPct) return;
 
           const angle = (arc.startAngle + arc.endAngle) / 2;
-          const x1 = arc.x + Math.cos(angle) * (arc.outerRadius + 3);
-          const y1 = arc.y + Math.sin(angle) * (arc.outerRadius + 3);
-          const x2 = arc.x + Math.cos(angle) * (arc.outerRadius + 18);
-          const y2 = arc.y + Math.sin(angle) * (arc.outerRadius + 18);
-          const dir = Math.cos(angle) >= 0 ? 1 : -1;
-          const x3 = x2 + dir * 12;
+          const cos = Math.cos(angle);
+          const sin = Math.sin(angle);
+          const side = cos >= 0 ? 1 : -1;
+
+          const x1 = arc.x + cos * (arc.outerRadius + 3);
+          const y1 = arc.y + sin * (arc.outerRadius + 3);
+          const x2 = arc.x + cos * (arc.outerRadius + (mobile ? 10 : 16));
+          const naturalY = arc.y + sin * (arc.outerRadius + (mobile ? 16 : 24));
+
+          const item = {
+            i, value, pct, side, x1, y1, x2,
+            y: naturalY,
+            label: `${arr[i][0]} ${pct.toFixed(1)}%`
+          };
+          (side > 0 ? right : left).push(item);
+        });
+
+        function spread(items) {
+          items.sort((a,b)=>a.y-b.y);
+          const top = area.top + 8;
+          const bottom = area.bottom - 8;
+
+          for(let i=0;i<items.length;i++){
+            if(i===0) items[i].y=Math.max(items[i].y,top);
+            else items[i].y=Math.max(items[i].y,items[i-1].y+lineGap);
+          }
+
+          if(items.length && items[items.length-1].y>bottom){
+            const shift=items[items.length-1].y-bottom;
+            items.forEach(x=>x.y-=shift);
+            for(let i=items.length-2;i>=0;i--){
+              items[i].y=Math.min(items[i].y,items[i+1].y-lineGap);
+            }
+            if(items[0].y<top){
+              const down=top-items[0].y;
+              items.forEach(x=>x.y+=down);
+            }
+          }
+        }
+
+        spread(left);
+        spread(right);
+
+        ctx.save();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "#718078";
+        ctx.fillStyle = "#435149";
+        ctx.font = `${mobile ? 8 : 10}px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif`;
+        ctx.textBaseline = "middle";
+
+        [...left,...right].forEach(item=>{
+          const targetX = item.side > 0
+            ? area.right - edgePad
+            : area.left + edgePad;
+
+          const elbowX = item.side > 0
+            ? targetX - elbow
+            : targetX + elbow;
 
           ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          ctx.lineTo(x3, y2);
+          ctx.moveTo(item.x1,item.y1);
+          ctx.lineTo(item.x2,item.y);
+          ctx.lineTo(elbowX,item.y);
+          ctx.lineTo(targetX,item.y);
           ctx.stroke();
+
+          ctx.textAlign = item.side > 0 ? "right" : "left";
+          const tx = item.side > 0 ? targetX - textGap : targetX + textGap;
+          ctx.fillText(item.label, tx, item.y);
         });
+
         ctx.restore();
       }
     };
 
     chart=new Chart(document.getElementById("pie"),{
       type:"pie",
-      plugins:[ChartDataLabels, leaderLines],
+      plugins:[smartLabels],
       data:{
         labels:arr.map(x=>x[0]),
         datasets:[{
@@ -258,27 +325,13 @@
       options:{
         responsive:true,
         maintainAspectRatio:false,
-        layout:{padding: window.innerWidth <= 560 ? {top:28,right:38,bottom:28,left:38} : {top:38,right:72,bottom:38,left:72}},
+        layout:{
+          padding: window.innerWidth <= 560
+            ? {top:18,right:78,bottom:18,left:78}
+            : {top:25,right:120,bottom:25,left:120}
+        },
         plugins:{
           legend:{display:false},
-          datalabels:{
-            display:(ctx)=>{
-              const v=ctx.dataset.data[ctx.dataIndex];
-              return total ? (v/total*100)>=2 : false;
-            },
-            formatter:(value,ctx)=>{
-              const pct=total?(value/total*100):0;
-              return ctx.chart.data.labels[ctx.dataIndex]+" "+pct.toFixed(1)+"%";
-            },
-            color:"#435149",
-            font:{size: window.innerWidth <= 560 ? 8 : 10,weight:"600"},
-            anchor:"end",
-            align:"end",
-            offset: window.innerWidth <= 560 ? 10 : 20,
-            clamp:false,
-            clip:false,
-            textAlign:"center"
-          },
           tooltip:{
             callbacks:{
               label:c=>`${c.label}: ${rp(c.raw)} (${total?(c.raw/total*100).toFixed(1):"0.0"}%)`
