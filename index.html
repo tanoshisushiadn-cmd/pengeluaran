@@ -21,10 +21,19 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
 .bar-track,.flow-track{height:11px;background:#edf1ee;border-radius:999px;overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#146c43,#20a464);border-radius:999px;min-width:3px}.bar-value{font-size:10px;font-weight:700;text-align:right;white-space:nowrap}
 .flow-row{margin-bottom:21px}.flow-label{display:flex;justify-content:space-between;gap:12px;font-size:11px;font-weight:650;margin-bottom:8px}.flow-fill{height:100%;border-radius:999px}.flow-in{background:linear-gradient(90deg,#146c43,#20a464)}.flow-out{background:#7f9f8c}
 #flowMasuk{color:#198754}#flowKeluar{color:#527060}.net-box{display:flex;justify-content:space-between;align-items:center;gap:15px;background:#f5f7f5;border-radius:14px;padding:15px;margin-top:28px;font-size:11px}.net-box strong{font-size:15px;color:#198754}.opening-note{font-size:10px;color:#8a958e;margin-top:12px}
-.tablebox{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}th{text-align:left;padding:11px 9px;border-bottom:1px solid #e6ede8;font-size:10px;color:#7d8982;text-transform:uppercase}td{padding:12px 9px;border-bottom:1px solid #f0f3f1;font-size:12px}.money{text-align:right;font-weight:650}
+
+    .bar-value-wrap{text-align:right;white-space:nowrap}.bar-value-wrap strong{display:block;font-size:10px}.bar-share{display:block;font-size:9px;color:#7f8b84;margin-top:2px}
+    .compare-panel{margin-bottom:18px}.compare-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:-5px 0 18px;font-size:10px;color:#6f7c74}
+    .legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}.legend-from{background:#9eb9a8}.legend-to{background:#198754}
+    .compare-list{display:flex;flex-direction:column;gap:16px}.compare-item{display:grid;grid-template-columns:130px minmax(0,1fr) 115px;gap:11px;align-items:center}
+    .compare-name{font-size:11px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.compare-bars{display:flex;flex-direction:column;gap:5px}
+    .compare-track{height:8px;background:#edf1ee;border-radius:999px;overflow:hidden}.compare-fill{height:100%;border-radius:999px;min-width:2px}.compare-from{background:#9eb9a8}.compare-to{background:linear-gradient(90deg,#146c43,#20a464)}
+    .compare-change{text-align:right;font-size:10px;font-weight:750;white-space:nowrap}.change-up{color:#198754}.change-down{color:#b6403b}.change-flat{color:#7b8780}.compare-amounts{display:block;font-size:8px;font-weight:500;color:#8a958e;margin-top:3px}
+
+    .tablebox{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:720px}th{text-align:left;padding:11px 9px;border-bottom:1px solid #e6ede8;font-size:10px;color:#7d8982;text-transform:uppercase}td{padding:12px 9px;border-bottom:1px solid #f0f3f1;font-size:12px}.money{text-align:right;font-weight:650}
 .loading{text-align:center;padding:80px 20px;color:#657269}.spinner{width:34px;height:34px;border:4px solid #e1ebe4;border-top-color:#198754;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}@keyframes spin{to{transform:rotate(360deg)}}.hidden{display:none}.empty{text-align:center;color:#8b968f;padding:25px}.error{max-width:700px;margin:60px auto;background:#fff;border:1px solid #eadada;border-radius:16px;padding:22px;color:#8a2e2e}
 @media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}}
-@media(max-width:560px){.wrap{padding:10px 8px 28px}.hero{padding:20px 16px;border-radius:16px}.hero h1{font-size:21px}.filters{padding:14px 12px;gap:10px}.field{flex:1 1 calc(50% - 5px);min-width:0}.period{width:100%;margin:0;padding:2px 0;font-size:11px}select{font-size:12px;padding:9px 8px}.cards{gap:8px}.card{padding:13px 11px}.value{font-size:16px}.grid{display:block}.grid .panel{margin-bottom:12px}.panel{padding:15px 12px}.panel-head{margin-bottom:16px}.panel-period{font-size:9px}.title{font-size:15px}.bar-list{gap:11px}.bar-item{grid-template-columns:75px minmax(0,1fr) 76px;gap:7px}.bar-name,.bar-value{font-size:9px}.bar-track,.flow-track{height:9px}.flow-label{font-size:10px}.net-box{padding:13px 11px;margin-top:20px}.net-box strong{font-size:13px}}
+@media(max-width:560px){.wrap{padding:10px 8px 28px}.hero{padding:20px 16px;border-radius:16px}.hero h1{font-size:21px}.filters{padding:14px 12px;gap:10px}.field{flex:1 1 calc(50% - 5px);min-width:0}.period{width:100%;margin:0;padding:2px 0;font-size:11px}select{font-size:12px;padding:9px 8px}.cards{gap:8px}.card{padding:13px 11px}.value{font-size:16px}.grid{display:block}.grid .panel{margin-bottom:12px}.panel{padding:15px 12px}.panel-head{margin-bottom:16px}.panel-period{font-size:9px}.title{font-size:15px}.bar-list{gap:11px}.bar-item{grid-template-columns:75px minmax(0,1fr) 76px;gap:7px}.bar-name,.bar-value{font-size:9px}.bar-track,.flow-track{height:9px}.flow-label{font-size:10px}.bar-value-wrap strong{font-size:9px}.bar-share{font-size:8px}.compare-item{grid-template-columns:72px minmax(0,1fr) 75px;gap:6px}.compare-name{font-size:9px}.compare-change{font-size:9px}.compare-amounts{font-size:7px}.compare-legend{font-size:9px;gap:10px}.net-box{padding:13px 11px;margin-top:20px}.net-box strong{font-size:13px}}
   </style>
 </head>
 <body>
@@ -65,6 +74,18 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
         <div class="net-box"><span>Arus kas bersih periode</span><strong id="flowNet">Rp0</strong></div>
         <div class="opening-note" id="openingNote">Saldo awal periode: Rp0</div>
       </article>
+    </section>
+
+    <section id="comparisonPanel" class="panel compare-panel hidden">
+      <div class="panel-head">
+        <div><div class="eyebrow">PERBANDINGAN</div><div class="title">Pengeluaran Per Kategori Antar Bulan</div></div>
+        <div class="panel-period" id="comparisonPeriod">-</div>
+      </div>
+      <div class="compare-legend">
+        <span><i class="legend-dot legend-from"></i><span id="legendFrom">Bulan awal</span></span>
+        <span><i class="legend-dot legend-to"></i><span id="legendTo">Bulan akhir</span></span>
+      </div>
+      <div id="comparisonBars" class="compare-list"></div>
     </section>
 
     <section class="panel">
@@ -133,14 +154,45 @@ select{width:100%;padding:10px 12px;border:1px solid #d9e4dc;border-radius:10px;
     document.getElementById("masuk").textContent=rp(masuk);document.getElementById("keluar").textContent=rp(keluar);document.getElementById("saldo").textContent=rp(saldo);
     const cf=document.getElementById("cashflow");cf.textContent=rp(net);cf.classList.remove("green","red");if(net>0)cf.classList.add("green");if(net<0)cf.classList.add("red");
     const label=monthShort(start)+" — "+monthShort(endMonth);document.getElementById("periodInfo").textContent=label;document.getElementById("categoryPeriod").textContent=label;document.getElementById("cashflowPeriod").textContent=label;document.getElementById("openingNote").textContent="Saldo awal periode: "+rp(openingBalance);
-    renderCategoryBars(period);renderCashflow(masuk,keluar,net);renderRows(period);
+    renderCategoryBars(period);renderCashflow(masuk,keluar,net);
+    if(fromKey!==toKey){
+      const fromTx=DATA.transactions.filter(x=>x.date.slice(0,7)===fromKey);
+      const toTx=DATA.transactions.filter(x=>x.date.slice(0,7)===toKey);
+      renderComparison(fromTx,toTx,fromKey,toKey);
+    }else{
+      document.getElementById("comparisonPanel").classList.add("hidden");
+    }
+    renderRows(period);
   }
 
   function categoryData(tx){const t={};tx.filter(x=>x.jenis==="Keluar").forEach(x=>t[x.kategori]=(t[x.kategori]||0)+x.amount);return Object.entries(t).sort((a,b)=>b[1]-a[1]);}
 
   function renderCategoryBars(tx){
-    const box=document.getElementById("categoryBars"),arr=categoryData(tx);box.innerHTML="";if(!arr.length){box.innerHTML='<div class="empty">Belum ada pengeluaran.</div>';return}
-    const max=arr[0][1]||1;arr.forEach(([name,val])=>{const el=document.createElement("div");el.className="bar-item";el.innerHTML=`<div class="bar-name" title="${esc(name)}">${esc(name)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,val/max*100)}%"></div></div><div class="bar-value">${rp(val)}</div>`;box.appendChild(el);});
+    const box=document.getElementById("categoryBars"),arr=categoryData(tx);box.innerHTML="";
+    if(!arr.length){box.innerHTML='<div class="empty">Belum ada pengeluaran.</div>';return}
+    const total=arr.reduce((s,x)=>s+x[1],0),max=arr[0][1]||1;
+    arr.forEach(([name,val])=>{
+      const share=total?val/total*100:0,el=document.createElement("div");el.className="bar-item";
+      el.innerHTML=`<div class="bar-name" title="${esc(name)}">${esc(name)}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(1,val/max*100)}%"></div></div><div class="bar-value-wrap"><strong>${rp(val)}</strong><span class="bar-share">${share.toFixed(1)}% dari total</span></div>`;
+      box.appendChild(el);
+    });
+  }
+
+  function renderComparison(fromTx,toTx,fromKey,toKey){
+    const panel=document.getElementById("comparisonPanel"),box=document.getElementById("comparisonBars");panel.classList.remove("hidden");
+    const fromMap=Object.fromEntries(categoryData(fromTx)),toMap=Object.fromEntries(categoryData(toTx));
+    const names=[...new Set([...Object.keys(fromMap),...Object.keys(toMap)])].sort((a,b)=>Math.max(toMap[b]||0,fromMap[b]||0)-Math.max(toMap[a]||0,fromMap[a]||0));
+    document.getElementById("comparisonPeriod").textContent=monthName(fromKey)+" vs "+monthName(toKey);
+    document.getElementById("legendFrom").textContent=monthName(fromKey);document.getElementById("legendTo").textContent=monthName(toKey);box.innerHTML="";
+    if(!names.length){box.innerHTML='<div class="empty">Belum ada pengeluaran untuk dibandingkan.</div>';return}
+    const max=Math.max(1,...names.flatMap(n=>[fromMap[n]||0,toMap[n]||0]));
+    names.forEach(name=>{
+      const oldVal=fromMap[name]||0,newVal=toMap[name]||0;let text="0.0%",cls="change-flat";
+      if(oldVal===0&&newVal>0){text="Baru";cls="change-up"}else if(oldVal>0){const ch=(newVal-oldVal)/oldVal*100;text=(ch>0?"+":"")+ch.toFixed(1)+"%";cls=ch>0?"change-up":ch<0?"change-down":"change-flat"}
+      const row=document.createElement("div");row.className="compare-item";
+      row.innerHTML=`<div class="compare-name" title="${esc(name)}">${esc(name)}</div><div class="compare-bars"><div class="compare-track"><div class="compare-fill compare-from" style="width:${oldVal?Math.max(1,oldVal/max*100):0}%"></div></div><div class="compare-track"><div class="compare-fill compare-to" style="width:${newVal?Math.max(1,newVal/max*100):0}%"></div></div></div><div class="compare-change ${cls}">${text}<span class="compare-amounts">${rp(oldVal)} → ${rp(newVal)}</span></div>`;
+      box.appendChild(row);
+    });
   }
 
   function renderCashflow(masuk,keluar,net){
